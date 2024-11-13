@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_media/features/auth/domain/entitites/app_user.dart';
 import 'package:social_media/features/auth/domain/repository/auth_repo.dart';
 
 class FirebaseAuthRepo implements AuthRepo {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
   Future<AppUser?> getCurrentUser() async {
@@ -61,6 +63,13 @@ class FirebaseAuthRepo implements AuthRepo {
         email: email,
         name: name,
       );
+
+      // сохрание в облачную базу данных
+      await firebaseFirestore
+          .collection("users")
+          .doc(user.uid)
+          .set(user.toJson());
+
       return user;
     } catch (e) {
       throw Exception('Ошибка авторизации $e');
