@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media/features/auth/presentation/cubits/auth_cubit.dart';
 
-import '../components/components.dart';
+import '../auth_components/auth_components.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? togglePages;
