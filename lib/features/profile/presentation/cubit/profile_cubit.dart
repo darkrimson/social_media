@@ -3,14 +3,13 @@ import 'package:social_media/features/profile/domain/repository/profile_reposito
 import 'package:social_media/features/profile/presentation/cubit/profile_states.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
-  final ProfileRepository profileRepository;
+  final ProfileRepository profileRepo;
 
-  ProfileCubit({required this.profileRepository}) : super(ProfileLoading());
+  ProfileCubit({required this.profileRepo}) : super(ProfileLoading());
 
-  // получить профиль пользователя
   Future<void> fetchUserProfile(String uid) async {
     try {
-      final user = await profileRepository.fetchUserProfile(uid);
+      final user = await profileRepo.fetchUserProfile(uid);
 
       if (user != null) {
         emit(ProfileLoaded(user));
@@ -28,7 +27,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     String? newBio,
   }) async {
     try {
-      final currentUser = await profileRepository.fetchUserProfile(uid);
+      final currentUser = await profileRepo.fetchUserProfile(uid);
 
       if (currentUser == null) {
         emit(ProfileError('Пользователь не найден'));
@@ -38,7 +37,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       // обновление профиля
       final updatedProfile =
           currentUser.copyWith(newBio: newBio ?? currentUser.bio);
-      await profileRepository.updateProfile(updatedProfile);
+      await profileRepo.updateProfile(updatedProfile);
 
       await fetchUserProfile(uid);
     } catch (e) {
